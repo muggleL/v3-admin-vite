@@ -75,12 +75,26 @@ const xGridOpt: VxeGridProps = reactive({
   toolbarConfig: {
     refresh: true,
     custom: true,
+    export: true,
+    import: true,
     slots: { buttons: "toolbar-btns" }
   },
   /** 自定义列配置项 */
   customConfig: {
     /** 是否允许列选中  */
     checkMethod: ({ column }) => !["username"].includes(column.field)
+  },
+
+  exportConfig: {
+    type: "xlsx",
+    filename: "test.xlsx",
+    sheetName: "demo",
+    useStyle: true,
+    isFooter: true
+  },
+
+  importConfig: {
+    types: ["xlsx", "xls"]
   },
   /** 列配置 */
   columns: [

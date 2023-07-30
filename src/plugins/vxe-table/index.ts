@@ -3,8 +3,11 @@ import { type App } from "vue"
 import VXETable from "vxe-table"
 // https://github.com/x-extends/vxe-table-plugin-element
 import VXETablePluginElement from "vxe-table-plugin-element"
+//https://github.com/x-extends/vxe-table-plugin-export-xlsx //导出 表格为 xlsx
+import VXETablePluginExportXLSX from "vxe-table-plugin-export-xlsx"
 
 VXETable.use(VXETablePluginElement)
+VXETable.use(VXETablePluginExportXLSX)
 
 /** 全局默认参数 */
 VXETable.setup({
