@@ -14,6 +14,8 @@ import {
   type VxeFormProps
 } from "vxe-table"
 
+import { Workbook } from "exceljs"
+
 defineOptions({
   // 命名当前组件
   name: "VxeTable"
@@ -39,6 +41,7 @@ const xGridOpt: VxeGridProps = reactive({
   pagerConfig: {
     align: "right"
   },
+
   /** 表单配置项 */
   formConfig: {
     items: [
@@ -90,11 +93,40 @@ const xGridOpt: VxeGridProps = reactive({
     filename: "test.xlsx",
     sheetName: "demo",
     useStyle: true,
-    isFooter: true
+    isFooter: true,
+    columnFilterMethod: (params) => {
+      if (params.$columnIndex == 0) return true
+      return true
+    }
   },
 
   importConfig: {
-    types: ["xlsx", "xls"]
+    types: ["xlsx"],
+    modes: ["insert"],
+    remote: true,
+    importMethod: (params) => {
+      const fileReader = new FileReader()
+
+      fileReader.onload = async (event) => {
+        if (event.target) {
+          const content: ArrayBuffer = event.target.result as ArrayBuffer
+          const workBook = new Workbook()
+          await workBook.xlsx.load(content)
+          const workSheet = workBook.worksheets[0]
+
+          workSheet.eachRow((row, _) => {
+            row.eachCell((cell, colNumber) => {
+              console.log(`  第 ${colNumber} 列：${cell.value}`)
+              //TODO 將 讀取的數據更新到表格上
+            })
+          })
+        }
+        console.log(params?.$table?.getData())
+        console.log(params.options)
+      }
+
+      fileReader.readAsArrayBuffer(params.file)
+    }
   },
   /** 列配置 */
   columns: [
